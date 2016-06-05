@@ -137,6 +137,19 @@ map.on('load', function () {
             "fill-color": "#e31a1c",
         }
     });
+    map.addSource('confirmedchanges', {
+        type: 'vector',
+        url: 'mapbox://bullocke.Confirmed'
+    });
+    map.addLayer({
+        "id": "2015_ClassPoly",
+        "type": "fill",
+        "source": "2015_ClassPoly",
+        "source-layer": "2015_ClassPoly",
+        "paint": {
+            "fill-color": "#2E0854",
+        }
+    });
 });
 
 //Do popups for each year, this needs to be condensed. 
