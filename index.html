@@ -105,6 +105,19 @@ var map = new mapboxgl.Map({
 
 
 map.on('load', function () {
+    map.addSource('landsat-live', {
+        "type": 'raster',
+        "url": 'mapbox://mapbox.landsat-live',
+        "tileSize": 256
+    });
+    map.addLayer({
+        "id": "landsat-live",
+        "type": "raster",
+        "source": "landsat-live",
+        "layout": {
+            "visibility": "none",
+        }
+    });
     map.addSource('2012_ClassPoly', {
         type: 'vector',
         url: 'mapbox://bullocke.15oowcct'
@@ -390,6 +403,7 @@ addLayer('2015', '2015_ClassPoly');
 addLayer('2014', '2014_ClassPoly');
 addLayer('2013', '2013_ClassPoly');
 addLayer('2012', '2012_ClassPoly');
+addLayer('Landsat', 'landsat-live');
 
 function addLayer(name, id) {
     var link = document.createElement('a');
