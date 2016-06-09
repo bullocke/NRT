@@ -50,6 +50,7 @@
 
 <script>
 mapboxgl.accessToken = 'pk.eyJ1IjoiYnVsbG9ja2UiLCJhIjoiQ1dNTFJiVSJ9.-6m5HWxlG6pixRS8mRdb9g';
+//mapboxgl.accessToken = 'sk.eyJ1IjoiYnVsbG9ja2UiLCJhIjoiY2lwMDVuaGwxMDJlZXVvbThnbzU0YXl4byJ9.InJ9GwQ4gTyt7BVHqGmmcA'
 var boundary = {
 "type": "FeatureCollection",
 "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
@@ -147,7 +148,33 @@ map.on('load', function () {
         "source": "confirmedchanges",
         "source-layer": "confirmedchanges",
         "paint": {
-            "fill-color": "#2E0854",
+            "fill-color": "#860106",
+        }
+    });
+    map.addSource('lowprob', {
+        type: 'vector',
+        url: 'mapbox://bullocke.LowProb'
+    });
+    map.addLayer({
+        "id": "lowprob",
+        "type": "fill",
+        "source": "lowprob",
+        "source-layer": "lowprob",
+        "paint": {
+            "fill-color": "#690008",
+        }
+    });
+    map.addSource('highprob', {
+        type: 'vector',
+        url: 'mapbox://bullocke.HighProb'
+    });
+    map.addLayer({
+        "id": "highprob",
+        "type": "fill",
+        "source": "highprob",
+        "source-layer": "highprob",
+        "paint": {
+            "fill-color": "#0000FF",
         }
     });
 });
@@ -170,7 +197,7 @@ var popup2016 = new mapboxgl.Popup({
     var feature = features[0];
 
     popup2016.setLngLat(map.unproject(e.point))
-        .setHTML(feature.properties.DN)
+        .setHTML(feature.properties.Date)
         .addTo(map);
 });
 var popup2015 = new mapboxgl.Popup({
