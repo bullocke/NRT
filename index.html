@@ -17,17 +17,52 @@
         <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.18.0/mapbox-gl.css' rel='stylesheet' />
         <style>
               body { margin:0; padding:0; }
-                #map { position:absolute; top:0; bottom:0; width:80%; }
+                #map { position:absolute; top:0; bottom:0; width:100%; }
             </style>
   </head>
   <body>
 <style>
- #menu {
-    position: absolute;
-    background: #fff;
-    padding: 10px;
-    font-family: 'Open Sans', sans-serif;
+    #menu {
+        background: #fff;
+        position: absolute;
+        z-index: 1;
+        top: 10px;
+        right: 30px;
+        border-radius: 3px;
+        width: 120px;
+        border: 1px solid rgba(0,0,0,0.4);
+        font-family: 'Open Sans', sans-serif;
+    }
 
+    #menu a {
+        font-size: 13px;
+        color: #404040;
+        display: block;
+        margin: 0;
+        padding: 0;
+        padding: 10px;
+        text-decoration: none;
+        border-bottom: 1px solid rgba(0,0,0,0.25);
+        text-align: center;
+    }
+
+    #menu a:last-child {
+        border: none;
+    }
+
+    #menu a:hover {
+        background-color: #f8f8f8;
+        color: #404040;
+    }
+
+    #menu a.active {
+        background-color: #3887be;
+        color: #ffffff;
+    }
+
+    #menu a.active:hover {
+        background: #3074a4;
+    }
 </style>
     <div class="wrapper">
       <header>
@@ -44,6 +79,7 @@
       </header>
       <section>
         <h3>
+        <nav id="menu"></nav>
         <div id='map' class='dark'></div>
 
 
@@ -80,6 +116,9 @@ map.on('load', function () {
         "source-layer": "2012_ClassPoly",
         "paint": {
             "fill-color": "#ffffb2",
+        },
+        "layout": {
+            "visibility": "visible",
         }
     });
 
@@ -110,6 +149,9 @@ map.on('load', function () {
         "source-layer": "2013_ClassPoly",
         "paint": {
             "fill-color": "#fecc5c",
+        },
+        "layout": {
+            "visibility": "visible",
         }
     });
     map.addSource('2014_ClassPoly', {
@@ -123,6 +165,9 @@ map.on('load', function () {
         "source-layer": "2014_ClassPoly",
         "paint": {
             "fill-color": "#fd8d3c",
+        },
+        "layout": {
+            "visibility": "visible",
         }
     });
     map.addSource('2015_ClassPoly', {
@@ -136,6 +181,9 @@ map.on('load', function () {
         "source-layer": "2015_ClassPoly",
         "paint": {
             "fill-color": "#e31a1c",
+        },
+        "layout": {
+            "visibility": "visible",
         }
     });
     map.addSource('confirmedchanges', {
@@ -149,6 +197,9 @@ map.on('load', function () {
         "source-layer": "confirmedchanges",
         "paint": {
             "fill-color": "#860106",
+        },
+        "layout": {
+            "visibility": "visible",
         }
     });
     map.addSource('lowprob', {
@@ -162,6 +213,9 @@ map.on('load', function () {
         "source-layer": "lowprob",
         "paint": {
             "fill-color": "#6CFF00",
+        },
+        "layout": {
+            "visibility": "visible",
         }
     });
     map.addSource('highprob', {
@@ -175,6 +229,9 @@ map.on('load', function () {
         "source-layer": "highprob",
         "paint": {
             "fill-color": "#0000FF",
+        },
+        "layout": {
+            "visibility": "visible",
         }
     });
 });
@@ -325,6 +382,39 @@ var popup2012 = new mapboxgl.Popup({
         .setHTML(feature.properties.DN)
         .addTo(map);
 });
+
+addLayer('Low Probability', 'lowprob');
+addLayer('High Probability', 'highprob');
+addLayer('2016', 'confirmedchanges');
+addLayer('2015', '2015_ClassPoly');
+addLayer('2014', '2014_ClassPoly');
+addLayer('2013', '2013_ClassPoly');
+addLayer('2012', '2012_ClassPoly');
+
+function addLayer(name, id) {
+    var link = document.createElement('a');
+    link.href = '#';
+    link.className = 'active';
+    link.textContent = name;
+
+    link.onclick = function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        var visibility = map.getLayoutProperty(id, 'visibility');
+
+        if (visibility === 'visible') {
+            map.setLayoutProperty(id, 'visibility', 'none');
+            this.className = '';
+        } else {
+            this.className = 'active';
+            map.setLayoutProperty(id, 'visibility', 'visible');
+        }
+    };
+
+    var layers = document.getElementById('menu');
+    layers.appendChild(link);
+}
 </script>
 <h3>
 <a id="support-or-contact" class="anchor" href="#support-or-contact" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Support or Contact</h3>
