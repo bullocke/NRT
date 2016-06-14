@@ -13,8 +13,8 @@
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
         <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
-        <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.18.0/mapbox-gl.js'></script>
-        <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.18.0/mapbox-gl.css' rel='stylesheet' />
+        <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.20.0/mapbox-gl.js'></script>
+        <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.20.0/mapbox-gl.css' rel='stylesheet' />
         <style>
               body { margin:0; padding:0; }
                 #map { position:absolute; top:0; bottom:0; width:100%; }
@@ -37,6 +37,7 @@
     #menu a {
         font-size: 13px;
         color: #404040;
+        font-weight: bold;
         display: block;
         margin: 0;
         padding: 0;
@@ -53,6 +54,7 @@
     #menu a:hover {
         background-color: rgba(0,0,0,0.4);
         color: #ffffff;
+        font-weight: bold;
         border: 1px solid rgba(0,0,0,0.4);
     }
 
@@ -60,6 +62,7 @@
         background-color: #404040;
         border: 1px solid rgba(0,0,0,0.4);
         color: #ffffff;
+        font-weight: bold;
     }
 
     #menu a.active:hover {
@@ -76,6 +79,7 @@
         </ul>
 
         <p class="header">This project is maintained by <a class="header name" href="https://github.com/bullocke">bullocke</a></p>
+       <!-- <a href = "https://www.bu.edu/earth/"><img src="images/BU.png" alt="Boston University" style="width:150px"></a> -->
 
 
       </header>
@@ -83,6 +87,7 @@
         <h3>
         <nav id="menu"></nav>
         <div id='map' class='dark'></div>
+        <img src="images/legend.jpg"> 
 
 
 
@@ -97,6 +102,9 @@ var boundary = {
 { "type": "Feature", "properties": { "location": "2012_Class.tif" }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -59.999999994611805, 0.0 ], [ -49.999999995479868, 0.0 ], [ -50.771330589561749, -9.999999999131946 ], [ -60.925596707510628, -9.999999999131946 ], [ -59.999999994611805, 0.0 ] ] ] } }
 ]
 }
+if (!mapboxgl.supported()) {
+        alert('Your browser does not support this application. Sorry!');
+        } else {
 
 var map = new mapboxgl.Map({
     container: 'map', 
@@ -120,22 +128,6 @@ map.on('load', function () {
             "visibility": "none",
         }
     });
-    map.addSource('2012_ClassPoly', {
-        type: 'vector',
-        url: 'mapbox://bullocke.15oowcct'
-    });
-    map.addLayer({
-        "id": "2012_ClassPoly",
-        "type": "fill",
-        "source": "2012_ClassPoly",
-        "source-layer": "2012_ClassPoly",
-        "paint": {
-            "fill-color": "#ffffb2",
-        },
-        "layout": {
-            "visibility": "visible",
-        }
-    });
 
     map.addSource("boundary", {
         "type": "geojson",
@@ -152,39 +144,6 @@ map.on('load', function () {
             "line-width": 2
         }
     });
-
-    map.addSource('2013_ClassPoly', {
-        type: 'vector',
-        url: 'mapbox://bullocke.dpg5u0go'
-    });
-    map.addLayer({
-        "id": "2013_ClassPoly",
-        "type": "fill",
-        "source": "2013_ClassPoly",
-        "source-layer": "2013_ClassPoly",
-        "paint": {
-            "fill-color": "#fecc5c",
-        },
-        "layout": {
-            "visibility": "visible",
-        }
-    });
-    map.addSource('2014_ClassPoly', {
-        type: 'vector',
-        url: 'mapbox://bullocke.c9lq27dt'
-    });
-    map.addLayer({
-        "id": "2014_ClassPoly",
-        "type": "fill",
-        "source": "2014_ClassPoly",
-        "source-layer": "2014_ClassPoly",
-        "paint": {
-            "fill-color": "#fd8d3c",
-        },
-        "layout": {
-            "visibility": "visible",
-        }
-    });
     map.addSource('2015_ClassPoly', {
         type: 'vector',
         url: 'mapbox://bullocke.a91p6kxj'
@@ -195,7 +154,14 @@ map.on('load', function () {
         "source": "2015_ClassPoly",
         "source-layer": "2015_ClassPoly",
         "paint": {
-            "fill-color": "#e31a1c",
+            "fill-color": {
+                property: 'DN',
+                stops: [
+                [2015001, '#ffffcc'],
+                [2015365, '#fd8d3c']
+                ]
+            },
+
         },
         "layout": {
             "visibility": "visible",
@@ -211,7 +177,13 @@ map.on('load', function () {
         "source": "confirmedchanges",
         "source-layer": "confirmedchanges",
         "paint": {
-            "fill-color": "#860106",
+            "fill-color": {
+                property: 'Date',
+                stops: [
+                [2016001, '#fc4e2a'],
+                [2016365, '#800026']
+                ]
+            },
         },
         "layout": {
             "visibility": "visible",
@@ -250,6 +222,7 @@ map.on('load', function () {
         }
     });
 });
+        }
 
 //Do popups for each year, this needs to be condensed. 
 var popuphighprob = new mapboxgl.Popup({
@@ -335,76 +308,11 @@ var popup2015 = new mapboxgl.Popup({
         .addTo(map);
 });
 
-var popup2014 = new mapboxgl.Popup({
-      closeButton: false,
-      closeOnClick: false
- });
-
- map.on('mousemove', function (e) {
-    var features = map.queryRenderedFeatures(e.point, { layers: ['2014_ClassPoly'] });
-      map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
-
-    if (!features.length) {
-      popup2014.remove();
-      return;
-    }
-    
-    var feature = features[0];
-
-    popup2014.setLngLat(map.unproject(e.point))
-        .setHTML(feature.properties.DN)
-        .addTo(map);
-});
-
-var popup2013 = new mapboxgl.Popup({
-      closeButton: false,
-      closeOnClick: false
- });
-
- map.on('mousemove', function (e) {
-    var features = map.queryRenderedFeatures(e.point, { layers: ['2013_ClassPoly'] });
-      map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
-
-    if (!features.length) {
-      popup2013.remove();
-      return;
-    }
-    
-    var feature = features[0];
-
-    popup2013.setLngLat(map.unproject(e.point))
-        .setHTML(feature.properties.DN)
-        .addTo(map);
-});
-
-var popup2012 = new mapboxgl.Popup({
-      closeButton: false,
-      closeOnClick: false
- });
-
- map.on('mousemove', function (e) {
-    var features = map.queryRenderedFeatures(e.point, { layers: ['2012_ClassPoly'] });
-      map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
-
-    if (!features.length) {
-      popup2012.remove();
-      return;
-    }
-    
-    var feature = features[0];
-
-    popup2012.setLngLat(map.unproject(e.point))
-        .setHTML(feature.properties.DN)
-        .addTo(map);
-});
 
 addLayer('Low Probability', 'lowprob');
 addLayer('High Probability', 'highprob');
 addLayer('2016', 'confirmedchanges');
 addLayer('2015', '2015_ClassPoly');
-addLayer('2014', '2014_ClassPoly');
-addLayer('2013', '2013_ClassPoly');
-addLayer('2012', '2012_ClassPoly');
 addLayer('Landsat', 'landsat-live');
 
 function addLayer(name, id) {
@@ -437,7 +345,6 @@ function addLayer(name, id) {
 
       </section>
       <footer>
-        <img src="images/legend.jpg", width="240"> 
       </footer>
     </div>
     <!--[if !IE]><script>fixScale(document);</script><![endif]-->

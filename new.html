@@ -1,0 +1,63 @@
+
+    map.addSource('confirmedchanges', {
+        type: 'vector',
+        url: 'mapbox://bullocke.Confirmed'
+    });
+    map.addLayer({
+        "id": "confirmedchanges",
+        "type": "fill",
+        "source": "confirmedchanges",
+        "source-layer": "confirmedchanges",
+        "paint": {
+            "fill-color": "#B90108",
+        }
+    });
+    map.addSource('lowprob', {
+        type: 'vector',
+        url: 'mapbox://bullocke.LowProb'
+    });
+    map.addLayer({
+        "id": "lowprob",
+        "type": "fill",
+        "source": "lowprob",
+        "source-layer": "lowprob",
+        "paint": {
+            "fill-color": "#690008",
+        }
+    });
+    map.addSource('highprob', {
+        type: 'vector',
+        url: 'mapbox://bullocke.HighProb'
+    });
+    map.addLayer({
+        "id": "highprob",
+        "type": "fill",
+        "source": "highprob",
+        "source-layer": "highprob",
+        "paint": {
+            "fill-color": "#0000FF",
+        }
+    });
+});
+
+//Do popups for each year, this needs to be condensed. 
+var popup2016 = new mapboxgl.Popup({
+      closeButton: false,
+      closeOnClick: false
+ });
+
+ map.on('mousemove', function (e) {
+    var features = map.queryRenderedFeatures(e.point, { layers: ['confirmedchanges'] });
+      map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
+
+    if (!features.length) {
+      popup2016.remove();
+      return;
+    }
+    
+    var feature = features[0];
+
+    popup2016.setLngLat(map.unproject(e.point))
+        .setHTML(feature.properties.Date)
+        .addTo(map);
+});

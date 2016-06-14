@@ -143,21 +143,22 @@ hr {
 /* Images */
 
 img {
-  position: relative;
+  position: fixed;
+  bottom: 5px;
+  right: 5px;
   margin: 0 auto;
-  max-width: 650px;
+  max-width: 240px;
   padding: 0px;
-  margin: 10px 0 32px 0;
-  border: 0px solid #ccc;
+  border: 2px solid #858585;
 }
 
+
 p img {
-  display: inline;
+  height: auto;
+  width: 100%;
+  max-width: 240px;
   margin: 0;
   padding: 0;
-  vertical-align: middle;
-  text-align: center;
-  border: none;
 }
 
 /* Code blocks */
