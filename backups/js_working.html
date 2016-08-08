@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Near-real time deforestation monitoring  by bullocke</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-light.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+        <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+        <script src='https://api.mapbox.com/mapbox.js/v2.4.0/mapbox.js'></script>
+        <link href='https://api.mapbox.com/mapbox.js/v2.4.0/mapbox.css' rel='stylesheet' /> 
+
+        <style>
+              body { margin:0; padding:0; }
+                #map { position:absolute; top:0; bottom:0; width:85%; }
+            </style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1 class="header">Near-real time deforestation monitoring </h1>
+        <p class="header">Operational example of near-real time change detection using daily MODIS products.</p>
+
+        <ul>
+          <li><a class="buttons github" href="https://github.com/bullocke/NRT">View On GitHub</a></li>
+        </ul>
+
+        <p class="header">This project is maintained by <a class="header name" href="https://github.com/bullocke">bullocke</a></p>
+
+
+      </header>
+      <section>
+            <div id='map'></div>
+            <script>
+                L.mapbox.accessToken = 'pk.eyJ1IjoiYnVsbG9ja2UiLCJhIjoiQ1dNTFJiVSJ9.-6m5HWxlG6pixRS8mRdb9g';
+                var map = L.mapbox.map('map','mapbox.satellite-v9').setView([-9.5, -62.50], 9);
+                var styleLayer = L.mapbox.styleLayer('mapbox://styles/bullocke/cio37tob7002wainexj3dfdio').addTo(map);
+                var gridLayer = L.mapbox.gridLayer('mapbox://bullocke.2opto66i').addTo(map);
+                map.gridLayer.on('click', function(e) {
+                    if (e.data && e.data.url) {
+                    window.open(e.data.url);
+                   }
+                 });
+                </script>
+
+      </section>
+      <footer>
+        <p><small>Hosted on <a href="https://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+        
+  </body>
+</html>
