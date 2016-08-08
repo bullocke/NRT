@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Near-real time forest monitoring by bullocke</title>
+    <title>Near-real time deforestation monitoring  by bullocke</title>
 
     <link rel="stylesheet" href="stylesheets/styles.css">
     <link rel="stylesheet" href="stylesheets/github-light.css">
@@ -71,9 +71,9 @@
 </style>
     <div class="wrapper">
       <header>
-        <h1 class="header">Near-real time forest monitoring </h1>
-        <p class="header">Operational example of near-real time forest change detection using daily MODIS products (beta and work in progress).</p>
-        <p>Scroll over pixel to view date of detected change in 'YEARDOY' format.</p>
+        <h1 class="header">Near-real time deforestation monitoring </h1>
+        <p class="header">Operational example of near-real time deforestation detection using daily MODIS products (beta and work in progress).</p>
+
         <ul>
           <li><a class="buttons github" href="https://github.com/bullocke/NRT">View On GitHub</a></li>
         </ul>
@@ -87,7 +87,8 @@
         <h3>
         <nav id="menu"></nav>
         <div id='map' class='dark'></div>
-        <img src="images/banner_full.jpg"> 
+        <img src="images/legend.jpg"> 
+        <img src="images/banner.png"> 
 
 
 
@@ -146,18 +147,18 @@ map.on('load', function () {
         }
     });
 
-    map.addSource('2015', {
+    map.addSource('2015_ClassPoly', {
         type: 'vector',
-        url: 'mapbox://bullocke.2015'
+        url: 'mapbox://bullocke.a91p6kxj'
     });
     map.addLayer({
-        "id": "2015",
+        "id": "2015_ClassPoly",
         "type": "fill",
-        "source": "2015",
-        "source-layer": "2015",
+        "source": "2015_ClassPoly",
+        "source-layer": "2015_ClassPoly",
         "paint": {
             "fill-color": {
-                property: 'Date',
+                property: 'DN',
                 stops: [
                 [2015001, '#ffffcc'],
                 [2015365, '#fd8d3c']
@@ -295,7 +296,7 @@ var popup2015 = new mapboxgl.Popup({
  });
 
  map.on('mousemove', function (e) {
-    var features = map.queryRenderedFeatures(e.point, { layers: ['2015'] });
+    var features = map.queryRenderedFeatures(e.point, { layers: ['2015_ClassPoly'] });
       map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
 
     if (!features.length) {
@@ -306,7 +307,7 @@ var popup2015 = new mapboxgl.Popup({
     var feature = features[0];
 
     popup2015.setLngLat(map.unproject(e.point))
-        .setHTML(feature.properties.Date)
+        .setHTML(feature.properties.DN)
         .addTo(map);
 });
 
@@ -314,7 +315,7 @@ var popup2015 = new mapboxgl.Popup({
 addLayer('Low Probability', 'lowprob');
 addLayer('High Probability', 'highprob');
 addLayer('2016', 'confirmedchanges');
-addLayer('2015', '2015');
+addLayer('2015', '2015_ClassPoly');
 addLayer('Landsat', 'landsat-live');
 
 function addLayer(name, id) {
